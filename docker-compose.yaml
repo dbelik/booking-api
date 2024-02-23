@@ -1,0 +1,63 @@
+version: "3.9"
+
+volumes:
+  general-datastore:
+  general-datastore-pgadmin:
+
+networks:
+  &general-database-network general-database-network:
+
+services:
+  &general-datastore booking-database:
+    image: postgres:16.2-alpine3.19
+    hostname: *general-datastore
+    container_name: *general-datastore
+    networks:
+      - *general-database-network
+    volumes:
+      - general-datastore:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=booking
+      - POSTGRES_USER=local
+      - POSTGRES_PASSWORD=password123
+    restart: on-failure
+
+  &general-datastore-pgadmin booking-pgadmin:
+    image: dpage/pgadmin4:7.2
+    container_name: *general-datastore-pgadmin
+    hostname: *general-datastore-pgadmin
+    profiles: ["pgadmin"]
+    restart: always
+    networks:
+      - *general-database-network
+    depends_on:
+      - *general-datastore
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@booking.com
+      PGADMIN_DEFAULT_PASSWORD: password123
+    ports:
+      - "6001:80"
+    volumes:
+      - general-datastore-pgadmin:/var/lib/pgadmin
+
+  &booking-server booking-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: *booking-server
+    hostname: *booking-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    networks:
+      - *general-database-network
+    depends_on:
+      - *general-datastore
+    environment:
+      - PORT=8000
+      - DATABASE_TYPE=postgres
+      - DATABASE_HOST=booking-database
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=local
+      - DATABASE_PASSWORD=password123
+      - DATABASE_NAME=booking
