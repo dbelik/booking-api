@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { instanceToInstance, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Amenity } from 'src/amenity/entities/amenity.entity';
+import * as lodash from 'lodash';
 
+import { Amenity } from '../amenity/entities/amenity.entity';
 import { CsvService } from '../csv/csv.service';
 import { ReservationImportDTO } from './dtos/reservation-import.dto';
 import { Reservation } from './entities/reservation.entity';
@@ -44,13 +45,27 @@ export class ReservationService {
   }
 
   async getBookingsForUser(userId: number) {
-    throw new Error(`Not implemented yet. Input: ${userId}`);
+    const results = await this.reservationRepository.find({
+      relations: {
+        amenity: true,
+      },
+      order: {
+        date: 'DESC',
+      },
+      where: {
+        user_id: userId,
+      },
+    });
+    return lodash.groupBy(results, 'date');
   }
 
   async getBookingsForAmenity(amenityId: number, timestamp: string) {
     return this.reservationRepository.find({
       relations: {
         amenity: true,
+      },
+      order: {
+        start_time: 'ASC',
       },
       where: {
         amenity: {
