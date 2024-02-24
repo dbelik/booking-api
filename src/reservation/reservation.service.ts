@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { instanceToInstance, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
+import { Amenity } from 'src/amenity/entities/amenity.entity';
 
 import { CsvService } from '../csv/csv.service';
 import { ReservationImportDTO } from './dtos/reservation-import.dto';
@@ -17,7 +18,15 @@ export class ReservationService {
   private async validateImportData(data: Reservation[]): Promise<Reservation[]> {
     const reservations = plainToInstance(ReservationImportDTO, { data });
     await validate(reservations);
-    return instanceToInstance(reservations).data;
+    return instanceToInstance(reservations).data.map((reservation) => {
+      const amenity = new Amenity();
+      amenity.id = reservation.amenity_id;
+      return {
+        ...reservation,
+        amenity,
+        duration: 0,
+      };
+    });
   }
 
   async importReservations(
@@ -39,6 +48,16 @@ export class ReservationService {
   }
 
   async getBookingsForAmenity(amenityId: number, timestamp: string) {
-    throw new Error(`Not implemented yet. Input: ${amenityId} ${timestamp}`);
+    return this.reservationRepository.find({
+      relations: {
+        amenity: true,
+      },
+      where: {
+        amenity: {
+          id: amenityId,
+        },
+        date: timestamp,
+      },
+    });
   }
 }
