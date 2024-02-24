@@ -1,7 +1,9 @@
 import { Transform } from 'class-transformer';
 import {
-  IsInt, IsNumberString, Max, Min,
+  IsInt, Max, Min, Validate,
 } from 'class-validator';
+
+import { IsValidTimestamp } from '../../common/validators/is-valid-timestamp.validator';
 
 export class ReservationDTO {
   @IsInt()
@@ -23,7 +25,7 @@ export class ReservationDTO {
   @Max(1440)
     end_time: number;
 
-  @IsNumberString()
+  @Validate(IsValidTimestamp)
   @Transform(({ value }) => {
     const date = new Date(Number.parseInt(value as string, 10));
     date.setHours(0, 0, 0, 0);

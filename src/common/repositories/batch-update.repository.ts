@@ -9,18 +9,13 @@ export abstract class BatchUpdateRepository<T> extends Repository<T> {
     overwrite: string[],
     conflictTarget: string[],
   ) {
-    return this
-      .createQueryBuilder()
+    return this.createQueryBuilder()
       .insert()
       .into(entity)
       .values(data)
-      .orUpdate(
-        overwrite,
-        conflictTarget,
-        {
-          skipUpdateIfNoValuesChanged: true,
-        },
-      )
+      .orUpdate(overwrite, conflictTarget, {
+        skipUpdateIfNoValuesChanged: true,
+      })
       .execute();
   }
 }

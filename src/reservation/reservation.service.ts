@@ -16,7 +16,9 @@ export class ReservationService {
     private readonly reservationRepository: ReservationRepository,
   ) {}
 
-  private async validateImportData(data: Reservation[]): Promise<Reservation[]> {
+  private async validateImportData(
+    data: Reservation[],
+  ): Promise<Reservation[]> {
     const reservations = plainToInstance(ReservationImportDTO, { data });
     await validate(reservations);
     return instanceToInstance(reservations).data.map((reservation) => {
@@ -30,16 +32,17 @@ export class ReservationService {
     });
   }
 
-  async importReservations(
-    buffer: Buffer,
-  ) {
+  async importReservations(buffer: Buffer) {
     const result = await this.cvsService.parseCsv<Reservation>(buffer);
-    const data = await this.validateImportData(result.data);
+    const data = await this.validateImportData(result);
     try {
       await this.reservationRepository.updateMany(data);
       return data;
     } catch {
-      throw new HttpException('Failed to import reservations from CSV', HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(
+        'Failed to import reservations from CSV',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
   }
 

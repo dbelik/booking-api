@@ -14,9 +14,7 @@ export class AmenityRepository extends BatchUpdateRepository<Amenity> {
     super(repository.target, repository.manager, repository.queryRunner);
   }
 
-  public async updateMany(
-    data: Amenity[],
-  ) {
+  public async updateMany(data: Amenity[]) {
     return super.updateMany(data, Amenity, ['name'], ['id', 'name']);
   }
 }

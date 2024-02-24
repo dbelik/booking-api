@@ -20,16 +20,17 @@ export class AmenityService {
     return instanceToInstance(amenities).data;
   }
 
-  async importAmenities(
-    buffer: Buffer,
-  ) {
+  async importAmenities(buffer: Buffer) {
     const result = await this.cvsService.parseCsv<Amenity>(buffer);
-    const data = await this.validateImportData(result.data);
+    const data = await this.validateImportData(result);
     try {
       await this.amenityRepository.updateMany(data);
       return data;
     } catch {
-      throw new HttpException('Failed to import amenities from CSV', HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new HttpException(
+        'Failed to import amenities from CSV',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
   }
 }

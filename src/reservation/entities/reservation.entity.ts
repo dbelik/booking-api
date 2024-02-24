@@ -1,6 +1,10 @@
 import { Exclude, Expose, Transform } from 'class-transformer';
 import {
-  Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Amenity } from '../../amenity/entities/amenity.entity';
@@ -18,7 +22,9 @@ export class Reservation {
     user_id: number;
 
   @Column()
-  @Transform(({ value }) => `${Math.floor(value / 60) >= 10 ? '' : '0'}${Math.floor(value / 60)}:${value % 60 >= 10 ? '' : '0'}${value % 60}`)
+  @Transform(
+    ({ value }) => `${Math.floor(value / 60) >= 10 ? '' : '0'}${Math.floor(value / 60)}:${value % 60 >= 10 ? '' : '0'}${value % 60}`,
+  )
     start_time: number;
 
   @Column()

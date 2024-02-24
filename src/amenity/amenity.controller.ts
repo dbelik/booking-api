@@ -1,16 +1,18 @@
 import {
-  Controller, Post, UploadedFile, UseInterceptors,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
+import { HttpResponseFormat } from '../common/filters/http-response-format.filter';
 import config from '../config/config';
 import { AmenityService } from './amenity.service';
 
 @Controller('amenities')
 export class AmenityController {
-  constructor(
-    private readonly amenityService: AmenityService,
-  ) {}
+  constructor(private readonly amenityService: AmenityService) {}
 
   @Post('import')
   @UseInterceptors(
@@ -20,9 +22,8 @@ export class AmenityController {
       },
     }),
   )
-  async importAmenities(
-  @UploadedFile() file: Express.Multer.File,
-  ) {
+  @UseInterceptors(HttpResponseFormat)
+  async importAmenities(@UploadedFile() file: Express.Multer.File) {
     return this.amenityService.importAmenities(file.buffer);
   }
 }

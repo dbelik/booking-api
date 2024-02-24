@@ -1,4 +1,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 pnpm install
+pnpm format
 pnpm lint
+pnpm test

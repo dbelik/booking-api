@@ -8,10 +8,7 @@ import { AmenityService } from './amenity.service';
 import { Amenity } from './entities/amenity.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Amenity]),
-    CsvModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Amenity]), CsvModule],
   controllers: [AmenityController],
   providers: [AmenityRepository, AmenityService],
 })

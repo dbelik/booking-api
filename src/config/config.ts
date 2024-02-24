@@ -12,6 +12,7 @@ export default () => ({
       : true,
   },
   import: {
-    maxFileSize: Number.parseInt(process.env.IMPORT_MAX_FILESIZE, 10) || 4 * 1024 * 1024,
+    maxFileSize:
+      Number.parseInt(process.env.IMPORT_MAX_FILESIZE, 10) || 4 * 1024 * 1024,
   },
 });

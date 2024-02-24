@@ -14,9 +14,12 @@ export class ReservationRepository extends BatchUpdateRepository<Reservation> {
     super(repository.target, repository.manager, repository.queryRunner);
   }
 
-  public async updateMany(
-    data: Reservation[],
-  ) {
-    return super.updateMany(data, Reservation, ['amenity_id', 'user_id', 'start_time', 'end_time', 'date'], ['id']);
+  public async updateMany(data: Reservation[]) {
+    return super.updateMany(
+      data,
+      Reservation,
+      ['amenity_id', 'user_id', 'start_time', 'end_time', 'date'],
+      ['id'],
+    );
   }
 }

@@ -4,9 +4,9 @@ import { Readable } from 'typeorm/platform/PlatformTools';
 
 @Injectable()
 export class CsvService {
-  async parseCsv<T>(buffer: Buffer): Promise<ParseResult<T>> {
+  async parseCsv<T>(buffer: Buffer): Promise<T[]> {
     const stream = Readable.from(buffer);
-    return new Promise<ParseResult<T>>((resolve, reject) => {
+    const result = await new Promise<ParseResult<T>>((resolve, reject) => {
       parse<T>(stream, {
         header: true,
         worker: true,
@@ -18,5 +18,6 @@ export class CsvService {
         transform: (value) => value.trim(),
       });
     });
+    return result.data;
   }
 }
