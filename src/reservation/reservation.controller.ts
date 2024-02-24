@@ -34,6 +34,6 @@ export class ReservationController {
   async importReservations(
   @UploadedFile() file: Express.Multer.File,
   ) {
-    await this.reservationService.importReservations(file.buffer);
+    return this.reservationService.importReservations(file.buffer);
   }
 }

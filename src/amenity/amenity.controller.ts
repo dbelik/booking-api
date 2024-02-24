@@ -23,6 +23,6 @@ export class AmenityController {
   async importAmenities(
   @UploadedFile() file: Express.Multer.File,
   ) {
-    await this.amenityService.importAmenities(file.buffer);
+    return this.amenityService.importAmenities(file.buffer);
   }
 }

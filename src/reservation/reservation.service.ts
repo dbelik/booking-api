@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { instanceToInstance, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import * as lodash from 'lodash';
@@ -37,10 +37,9 @@ export class ReservationService {
     const data = await this.validateImportData(result.data);
     try {
       await this.reservationRepository.updateMany(data);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(`Failed to import some entries. Error message: ${error.message}`);
-      }
+      return data;
+    } catch {
+      throw new HttpException('Failed to import reservations from CSV', HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 
