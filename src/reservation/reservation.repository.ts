@@ -3,20 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { BatchUpdateRepository } from '../common/repositories/batch-update.repository';
-import { Amenity } from './entities/amenity.entity';
+import { Reservation } from './entities/reservation.entity';
 
 @Injectable()
-export class AmenityRepository extends BatchUpdateRepository<Amenity> {
+export class ReservationRepository extends BatchUpdateRepository<Reservation> {
   constructor(
-  @InjectRepository(Amenity)
-    repository: Repository<Amenity>,
+  @InjectRepository(Reservation)
+    repository: Repository<Reservation>,
   ) {
     super(repository.target, repository.manager, repository.queryRunner);
   }
 
   public async updateMany(
-    data: Amenity[],
+    data: Reservation[],
   ) {
-    return super.updateMany(data, Amenity, ['name'], ['id', 'name']);
+    return super.updateMany(data, Reservation, ['amenity_id', 'user_id', 'start_time', 'end_time', 'date'], ['id']);
   }
 }

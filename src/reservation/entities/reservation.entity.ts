@@ -6,17 +6,17 @@ export class Reservation {
     id: number;
 
   @Column()
-    amenityId: number;
+    amenity_id: number;
 
   @Column()
-    userId: number;
+    user_id: number;
 
   @Column()
-    startTime: number;
+    start_time: number;
 
   @Column()
-    endTime: number;
+    end_time: number;
 
   @Column()
-    date: number;
+    date: string;
 }

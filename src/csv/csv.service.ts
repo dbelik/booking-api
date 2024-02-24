@@ -14,7 +14,7 @@ export class CsvService {
         delimiter: ',',
         complete: resolve,
         error: reject,
-        transformHeader: (header) => header.trim().replaceAll(/\s\s+/g, '_').toLowerCase(),
+        transformHeader: (header) => header.trim().replaceAll(/\s+/g, '_').toLowerCase(),
         transform: (value) => value.trim(),
       });
     });

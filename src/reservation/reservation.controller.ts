@@ -1,5 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller, Get, Param, Post, UploadedFile, UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
+import config from '../config/config';
 import { ReservationService } from './reservation.service';
 
 @Controller('reservations')
@@ -17,5 +21,19 @@ export class ReservationController {
     @Param('timestamp') timestamp: string,
   ) {
     return this.reservationService.getBookingsForAmenity(amenityId, timestamp);
+  }
+
+  @Post('import')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: {
+        fileSize: config().import.maxFileSize,
+      },
+    }),
+  )
+  async importReservations(
+  @UploadedFile() file: Express.Multer.File,
+  ) {
+    await this.reservationService.importReservations(file.buffer);
   }
 }
