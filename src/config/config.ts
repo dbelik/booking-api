@@ -7,8 +7,11 @@ export default () => ({
     username: process.env.DATABASE_USERNAME || 'local',
     password: process.env.DATABASE_PASSWORD || 'local',
     database: process.env.DATABASE_NAME || 'booking',
-    synchronize: process.env.DATABASE_HOST
-      ? process.env.DATABASE_HOST === 'true'
+    synchronize: process.env.DATABASE_SYNCHRONIZE
+      ? process.env.DATABASE_SYNCHRONIZE === 'true'
       : true,
+  },
+  import: {
+    maxFileSize: Number.parseInt(process.env.IMPORT_MAX_FILESIZE, 10) || 4 * 1024 * 1024,
   },
 });
