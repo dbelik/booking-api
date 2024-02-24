@@ -1,5 +1,6 @@
+import { Transform } from 'class-transformer';
 import {
-  IsDateString, IsInt, Max, Min,
+  IsInt, IsNumberString, Max, Min,
 } from 'class-validator';
 
 export class ReservationDTO {
@@ -22,6 +23,11 @@ export class ReservationDTO {
   @Max(1440)
     end_time: number;
 
-  @IsDateString()
+  @IsNumberString()
+  @Transform(({ value }) => {
+    const date = new Date(Number.parseInt(value as string, 10));
+    date.setHours(0, 0, 0, 0);
+    return date.getTime().toString();
+  })
     date: string;
 }

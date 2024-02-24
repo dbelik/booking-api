@@ -1,8 +1,11 @@
-import { ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, ValidateNested } from 'class-validator';
 
 import { ReservationDTO } from './reservation.dto';
 
 export class ReservationImportDTO {
-  @ValidateNested()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ReservationDTO)
     data: ReservationDTO[];
 }
