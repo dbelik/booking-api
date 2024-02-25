@@ -1,8 +1,15 @@
 import {
-  Body, Controller, Post, Res, UseInterceptors,
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { HttpResponseFormat } from '../common/filters/http-response-format.filter';
@@ -20,6 +27,19 @@ export class AuthController {
 
   @Post('signup')
   @UseInterceptors(HttpResponseFormat)
+  @ApiTags('auth')
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'New user has been created.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input.',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Email has already been taken.',
+  })
   async signup(
   @Res({ passthrough: true }) response: Response,
     @Body() signup: SignupDTO,
@@ -39,6 +59,20 @@ export class AuthController {
   }
 
   @Post('signin')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('auth')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successfully signed in.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Invalid email or password.',
+  })
   @UseInterceptors(HttpResponseFormat)
   async signin(
   @Res({ passthrough: true }) response: Response,
@@ -59,6 +93,12 @@ export class AuthController {
   }
 
   @Post('signout')
+  @HttpCode(HttpStatus.OK)
+  @ApiTags('auth')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Successfully signed out.',
+  })
   @UseInterceptors(HttpResponseFormat)
   async signout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie(this.configService.getOrThrow('auth.cookie.name'));

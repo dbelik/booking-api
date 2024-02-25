@@ -30,7 +30,10 @@ export class AuthService {
       !existingUser
       || !(await this.hashingService.compare(data.password, existingUser.password))
     ) {
-      throw new HttpException('Invalid email or password', HttpStatus.CONFLICT);
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
     return existingUser;
   }

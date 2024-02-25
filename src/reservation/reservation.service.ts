@@ -68,19 +68,24 @@ export class ReservationService {
   }
 
   async getBookingsForAmenity(amenityId: number, timestamp: string) {
-    return this.reservationRepository.find({
-      relations: {
-        amenity: true,
-      },
-      order: {
-        start_time: 'ASC',
-      },
-      where: {
-        amenity: {
-          id: amenityId,
+    try {
+      const result = await this.reservationRepository.find({
+        relations: {
+          amenity: true,
         },
-        date: timestamp,
-      },
-    });
+        order: {
+          start_time: 'ASC',
+        },
+        where: {
+          amenity: {
+            id: amenityId,
+          },
+          date: timestamp,
+        },
+      });
+      return result;
+    } catch {
+      return [];
+    }
   }
 }
