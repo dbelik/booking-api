@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { HashingService } from 'src/hashing/hashing.service';
 
+import { HashingService } from '../hashing/hashing.service';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { SigninDTO } from './dtos/signin.dto';

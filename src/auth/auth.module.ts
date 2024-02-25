@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HashingModule } from 'src/hashing/hashing.module';
 
 import config from '../config/config';
+import { HashingModule } from '../hashing/hashing.module';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtStrategyService } from './jwt-strategy.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { AuthService } from './auth.service';
     HashingModule,
   ],
   controllers: [AuthController],
-  providers: [UserService, AuthService],
+  providers: [JwtStrategyService, UserService, AuthService],
 })
 export class AuthModule {}

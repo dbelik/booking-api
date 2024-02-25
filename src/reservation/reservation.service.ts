@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { instanceToInstance, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import * as lodash from 'lodash';
-import { User } from 'src/user/entities/user.entity';
 
 import { Amenity } from '../amenity/entities/amenity.entity';
 import { CsvService } from '../csv/csv.service';
+import { User } from '../user/entities/user.entity';
 import { ReservationImportDTO } from './dtos/reservation-import.dto';
 import { Reservation } from './entities/reservation.entity';
 import { ReservationRepository } from './reservation.repository';
