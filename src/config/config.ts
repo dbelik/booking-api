@@ -15,4 +15,12 @@ export default () => ({
     maxFileSize:
       Number.parseInt(process.env.IMPORT_MAX_FILESIZE, 10) || 4 * 1024 * 1024,
   },
+  auth: {
+    salt: Number.parseInt(process.env.AUTH_SALT, 10) || 10,
+    cookie: {
+      secret: process.env.AUTH_COOKIE_SECRET || 'secret',
+      ttl: Number.parseInt(process.env.AUTH_COOKIE_TTL, 10) || 3_600_000,
+      name: 'auth_token',
+    },
+  },
 });

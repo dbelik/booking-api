@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { Amenity } from '../../amenity/entities/amenity.entity';
+import { User } from '../../user/entities/user.entity';
 
 @Entity()
 export class Reservation {
@@ -18,8 +19,9 @@ export class Reservation {
   @JoinColumn({ name: 'amenity_id' })
     amenity: Amenity;
 
-  @Column()
-    user_id: number;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
+    user: User;
 
   @Column()
   @Transform(

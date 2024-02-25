@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { instanceToInstance, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import * as lodash from 'lodash';
+import { User } from 'src/user/entities/user.entity';
 
 import { Amenity } from '../amenity/entities/amenity.entity';
 import { CsvService } from '../csv/csv.service';
@@ -24,9 +25,12 @@ export class ReservationService {
     return instanceToInstance(reservations).data.map((reservation) => {
       const amenity = new Amenity();
       amenity.id = reservation.amenity_id;
+      const user = new User();
+      user.id = reservation.user_id;
       return {
         ...reservation,
         amenity,
+        user,
         duration: 0,
       };
     });
@@ -55,7 +59,9 @@ export class ReservationService {
         date: 'DESC',
       },
       where: {
-        user_id: userId,
+        user: {
+          id: userId,
+        },
       },
     });
     return lodash.groupBy(results, 'date');
