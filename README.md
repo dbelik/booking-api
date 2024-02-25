@@ -27,3 +27,9 @@ The project is dockerized for easy deployment. Simply run `docker-compose up`
 in the project directory to launch the API container. Additional tools
 can be launched by specifying them with `COMPOSE_PROFILES` variable.
 For example, to launch pgadmin, set `COMPOSE_PROFILES=pgadmin`.
+
+## Swagger Documentation
+
+The API documentation is available using Swagger. 
+After launching the project locally, you can access the 
+Swagger UI at `localhost:8000/api/docs`.
